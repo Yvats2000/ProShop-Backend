@@ -6,7 +6,6 @@ const db = require('../db/db.js');
 async function getProducts(req, res)  {
     try{
         const Product = await db.Products.findAll({
-            // attributes:['_id']
         })
         // console.log(Product)
         res.status(200).json({"status":true,"products":Product,"message" : "api works"})

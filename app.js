@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path')
 
 const express = require('express');
 // const cors = require('cors');
@@ -19,6 +20,10 @@ app.use(function (req, res, next) {
     next();
 });
 //Headers
+
+
+const dirname = path.resolve()
+app.use('/uploads', express.static(path.join(dirname, '/uploads')))
 
 const port = process.env.PORT || 3000;
 const productRoute=require('./routes/Product');

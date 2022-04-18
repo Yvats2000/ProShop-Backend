@@ -12,6 +12,8 @@ function model(sequelize) {
         bracountInStock:{type:DataTypes.INTEGER},
         rating:{type:DataTypes.INTEGER},
         numReviews:{type:DataTypes.INTEGER},
+        createdBy:{type:DataTypes.INTEGER},
+
 
     }
     return sequelize.define('Product',attributes,{ timestamps: false });

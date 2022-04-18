@@ -18,6 +18,11 @@ async function initialize() {
 
         db.Products = require('../models/Product')(sequelize);
         db.User = require('../models/user')(sequelize);
+        db.EscrowAgreement = require('../models/escroAgreement')(sequelize);
+        db.PropertyInfo = require('../models/escrowPropertyInfo')(sequelize);
+
+
+        db.User.hasMany(db.Products, {  foreignKey: 'createdBy' })
 
         await sequelize.sync();
     } catch (error) {

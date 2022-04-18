@@ -3,23 +3,26 @@ const{ generateToken}= require('./utlis/generateToken');
 const {encryptPass,checkUser}=require('../helpers/Crypto');
 
 
+// encrypt random
+// decript solving
 // signIn 
 async function authUser(req, res)  {
      const data = req.body;
      let pass=await encryptPass(data.password)
-     console.log(pass)
-   let user={
-      "name": data.name,
-      "email": data.email,
-      "password": await encryptPass(data.password)
-   }
-   const Product = await db.User.create(user)
-   // const Product = await db.User.find({"email":data.email})
-   // if(Product) {
-
-   // }
-
-   res.status(200).json({"status":true,"products":Product,"message" : "api works"})
+      console.log(pass)
+      let user={
+         "name": data.name,
+         "email": data.email,
+         "password": await encryptPass(data.password)
+      }
+const userdata=await db.User.findOne({where:{email:user.email}})
+if(!userdata){
+   const data = await db.User.create(user)
+   res.status(200).json({"status":true,"products":data,"message" : "api works"})
+}else{
+   res.status(200).json({"status":false,"message" : "user already exist"})
+}
+  
 }
 
 
@@ -27,7 +30,7 @@ async function login(req, res) {
    try {
       const data = req.body;
       const users = await db.User.findOne({where:{"email":data.email}});
-      console.log(users)
+      // console.log(users)
       if(!users){
          res.status(200).json({"status":false,"message":"user not found"})
       }else{
@@ -36,7 +39,7 @@ async function login(req, res) {
          if(users&& compare){
             res.status(200).json({"status":true,user : users.name,
                                                 _id : users._id ,           
-                                                email : users.email,
+                                                email : users.email, 
                                                 password: users.password,
                                                 token : generateToken( users._id )})
          }else{
@@ -51,14 +54,12 @@ async function login(req, res) {
 // get user profile (Protected route)
 
 async function getuserProfile(req, res) {
-   const users = await db.User.findOne(req.user._id)
-   if(users) {
-      res.json({user : users.name,
-         _id : users._id ,           
-         email : users.email,
-         password: users.password})
-   } else {
-      console.log(error)
-}
+   // res.status(200).json({'message':"api works"})
+   let userId=res.locals['userId']
+   console.log(userId,'==')
+   const users = await db.User.findOne({where:{"_id":userId}})
+   res.status(200).json({"status":true,user:users.name,
+                                       email:users.email,
+                                       admin:users.admin})
 }
 module.exports= { authUser, login, getuserProfile}

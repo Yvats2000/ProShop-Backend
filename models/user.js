@@ -7,7 +7,8 @@ function model(sequelize) {
         email:{type:DataTypes.STRING},
         password:{type:DataTypes.TEXT
         },
-        admin:{type:DataTypes.BOOLEAN, defaultValue:false}
+        admin:{type:DataTypes.BOOLEAN, defaultValue:false},
+        createdBy:{type:DataTypes.INTEGER},
 
     }
     return sequelize.define('user',attributes,{ timestamps: false });
